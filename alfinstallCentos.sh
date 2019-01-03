@@ -17,7 +17,7 @@ export DEFAULTYESNO="y"
 
 # Branch name to pull from server. Use master for stable.
 BRANCH=experimental
-export BASE_DOWNLOAD=https://raw.githubusercontent.com/amineyc/alfresco-centos-install/$BRANCH
+export BASE_DOWNLOAD=https://raw.githubusercontent.com/amineyc/AlfrescoCentOSInstaller/$BRANCH
 export KEYSTOREBASE=https://svn.alfresco.com/repos/alfresco-open-mirror/alfresco/HEAD/root/projects/repository/config/alfresco/keystore
 
 #Change this to prefered locale to make sure it exists. This has impact on LibreOffice transformations
@@ -25,7 +25,7 @@ export KEYSTOREBASE=https://svn.alfresco.com/repos/alfresco-open-mirror/alfresco
 #export LOCALESUPPORT=en_US.utf8
 export LOCALESUPPORT=fr_FR.utf8
 
-#Tomcat and JDBC 
+#Tomcat and JDBC
 
 export TOMCAT_DOWNLOAD=https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.28/bin/apache-tomcat-8.5.28.tar.gz
 export JDBCPOSTGRESURL=https://jdbc.postgresql.org/download
@@ -111,7 +111,7 @@ echo
 echoblue "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
 echogreen "Alfresco CentOS installer by Amine YC."
 #echogreen "Please read the documentation at"
-#echogreen "https://github.com/amineyc/alfresco-centos-install."
+#echogreen "https://github.com/amineyc/AlfrescoCentOSInstaller."
 echoblue "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
 echo
 
@@ -132,8 +132,8 @@ echo
 echoblue "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
 echo "Preparing for install. Updating the YUM package index files..."
 echoblue "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-sudo yum $YUMVERBOSITY update;
-echo
+sudo yum $YUMVERBOSITY update &&
+echo "checking updates done"
 
 # Installaing dependancy
 
@@ -233,7 +233,7 @@ if [ "$installtomcat" = "y" ]; then
   sudo mkdir -p $CATALINA_HOME/conf/Catalina/localhost
   # Get Alfresco config
   echo "Downloading tomcat configuration files..."
-  
+
   sudo curl -# -o $CATALINA_HOME/conf/server.xml $BASE_DOWNLOAD/tomcat/server.xml
   sudo curl -# -o $CATALINA_HOME/conf/catalina.properties $BASE_DOWNLOAD/tomcat/catalina.properties
   sudo curl -# -o $CATALINA_HOME/conf/tomcat-users.xml $BASE_DOWNLOAD/tomcat/tomcat-users.xml
@@ -242,7 +242,7 @@ if [ "$installtomcat" = "y" ]; then
     sudo curl -# -o /etc/systemd/system/alfresco.service $BASE_DOWNLOAD/tomcat/alfresco.service
     sudo curl -# -o $ALF_HOME/alfresco-service.sh $BASE_DOWNLOAD/scripts/alfresco-service.sh
     sudo chmod 755 $ALF_HOME/alfresco-service.sh
-    sudo sed -i "s/@@LOCALESUPPORT@@/$LOCALESUPPORT/g" $ALF_HOME/alfresco-service.sh 
+    sudo sed -i "s/@@LOCALESUPPORT@@/$LOCALESUPPORT/g" $ALF_HOME/alfresco-service.sh
     # Enable the service
     sudo systemctl enable alfresco.service
     sudo systemctl daemon-reload
@@ -269,7 +269,7 @@ if [ "$installtomcat" = "y" ]; then
   fi
   read -e -p "Please enter the host name for Alfresco Repository server (fully qualified domain name) as shown to users${ques} [$SHARE_HOSTNAME] " -i "$SHARE_HOSTNAME" REPO_HOSTNAME
   read -e -p "Please enter the host name for Alfresco Repository server that Share will use to talk to repository${ques} [localhost] " -i "localhost" SHARE_TO_REPO_HOSTNAME
-  
+
   # Add default alfresco-global.propertis
   ALFRESCO_GLOBAL_PROPERTIES=/tmp/alfrescoinstall/alfresco-global.properties
   sudo curl -# -o $ALFRESCO_GLOBAL_PROPERTIES $BASE_DOWNLOAD/tomcat/alfresco-global.properties
@@ -334,7 +334,7 @@ if [ "$installnginx" = "y" ]; then
   sudo mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.sample
   sudo curl -# -o /etc/nginx/nginx.conf $BASE_DOWNLOAD/nginx/nginx.conf
   sudo curl -# -o /etc/nginx/conf.d/alfresco.conf $BASE_DOWNLOAD/nginx/alfresco.conf
-  sudo curl -# -o /etc/nginx/conf.d/alfresco.conf.ssl $BASE_DOWNLOAD/nginx/alfresco.conf.ssl 
+  sudo curl -# -o /etc/nginx/conf.d/alfresco.conf.ssl $BASE_DOWNLOAD/nginx/alfresco.conf.ssl
   sudo curl -# -o /etc/nginx/conf.d/basic-settings.conf $BASE_DOWNLOAD/nginx/basic-settings.conf
   sudo mkdir -p /var/cache/nginx/alfresco
   # Make the ssl dir as this is what is used in sample config
