@@ -327,7 +327,8 @@ read -e -p "Install nginx${ques} [y/n] " -i "$DEFAULTYESNO" installnginx
 if [ "$installnginx" = "y" ]; then
   echoblue "Installing nginx. Fetching packages..."
   echo
-  sudo curl -# -o /etc/yum.repo.d/nginx.repo /$BASE_DOWNLOAD/nginx/nginx.repo
+  sudo wget $BASE_DOWNLOAD/nginx/nginx.repo
+  sudo mv nginx.repo /etc/yum.repo.d/nginx.repo
   sudo yum $YUMVERBOSITY update && sudo yum $YUMVERBOSITY install nginx
   sudo systemctl enable nginx
   sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
