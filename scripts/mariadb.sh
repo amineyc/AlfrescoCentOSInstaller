@@ -21,6 +21,16 @@ echo
 
 read -e -p "Install MariaDB? [y/n] " -i "n" installmariadb
 if [ "$installmariadb" = "y" ]; then
+  cat <<EOF > /etc/yum.repos.d/mariadb.repo
+# MariaDB 10.3 CentOS repository list - created 2019-04-02 12:41 UTC
+# http://downloads.mariadb.org/mariadb/repositories/
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.3/centos7-ppc64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+EOF
+  sudo yum -y update
   sudo yum -y install mariadb-server
   systemctl enable mariadb
   systemctl start mariadb
