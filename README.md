@@ -1,1 +1,1 @@
-# AlfrescoCentOSInstaller test
+# AlfrescoCentOSInstaller
